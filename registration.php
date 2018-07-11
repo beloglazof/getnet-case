@@ -1,16 +1,7 @@
 <?php
 session_start();
 
-$servername = 'localhost';
-$user = 'gtntest1-profile';
-$password = 'vaDNvkx-,pxtKDN9';
-$database = 'gtntest1-profile';
-
-$connection = new mysqli($servername, $user, $password, $database);
-
-if ($connection -> connect_error) {
-    die('Connection failed: ' . $connection -> connect_error);
-}
+require "connectToDB";
 
 $firstname = $_POST['firstname'];
 $lastname = $_POST['lastname'];
