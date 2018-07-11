@@ -1,17 +1,10 @@
 <?php
 session_start();
 
-<<<<<<< HEAD
 $servername = 'localhost';
 $user = 'gtntest1-profile';
-$password = 'bKQRFib9rpGb5CPV';
+$password = 'vaDNvkx-,pxtKDN9';
 $database = 'gtntest1-profile';
-=======
-$servername = '127.0.0.1';
-$user = 'root';
-$password = 'password';
-$database = 'user_info';
->>>>>>> 2fde047afa450497a3bcfb682ee85c4834ed3682
 
 $connection = new mysqli($servername, $user, $password, $database);
 
@@ -50,8 +43,4 @@ if ($password === $confirmPass) {
 
 
 
-<<<<<<< HEAD
 ?>
-=======
-?>
->>>>>>> 2fde047afa450497a3bcfb682ee85c4834ed3682
