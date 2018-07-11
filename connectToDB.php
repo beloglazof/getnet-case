@@ -2,7 +2,7 @@
     $servername = '127.0.0.1';
     $user = 'gtntest1-profile';
     $password = 'vaDNvkx-,pxtKDN9';
-    $database = 'users';
+    $database = 'gtntest1-profile';
 
     $connection = new mysqli($servername, $user, $password, $database);
 
