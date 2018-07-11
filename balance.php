@@ -9,8 +9,12 @@
     if ($page == 1) {
         $result = $connection -> 
         query("SELECT * FROM user_{$session_id}_balance WHERE user_id = {$session_id} LIMIT 5");
+    } elseif ($page == 2) {
+        $page_limit = 5;
+        $result = $connection -> 
+    query("SELECT * FROM user_{$session_id}_balance WHERE user_id = {$session_id} LIMIT 5, $page_limit");
     } else {
-        $page_limit = 5 * ($page - 1);
+        $page_limit = 10;
         $result = $connection -> 
     query("SELECT * FROM user_{$session_id}_balance WHERE user_id = {$session_id} LIMIT 5, $page_limit");
     }
