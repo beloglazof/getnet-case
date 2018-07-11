@@ -3,8 +3,8 @@ session_start();
 
 require "connectToDB.php";
 require "userData.php";
-
 ?>
+
 <!doctype html>
 <html lang="ru">
 <head>
