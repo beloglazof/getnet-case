@@ -19,13 +19,13 @@ require "userData.php";
             <div class="row my-4">
                 <?php include "navlinks.php"; ?>
 
-                <div class="col-12 col-lg-3 my-4">
-                    <img class="img-fluid mb-3" src="/img/img_avatar.png">
+                <div class="col-12 col-md-3 my-4">
+                    <img class="img-fluid mb-3 rounded" src="/img/img_avatar.png ">
                     <h1 class="h4 mb-2"><?php echo "{$user_data['firstname']} {$user_data['lastname']}"; ?></h1>
                     <div class="h6">На счету: <?php echo "{$user_data['balance']} у.е." ?></div>
                     <div class="small mt-5"><a href="edit-profile.php">Редактировать профиль</a></div>
                 </div>
-                <div class="col-12 col-lg-9 my-4">
+                <div class="col-12 col-md-9 my-4">
                     <h1>Профиль <?php echo "{$user_data['email']}";?></h1>
                    
                 </div>
