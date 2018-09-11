@@ -1,23 +1,23 @@
 <?php 
-session_start();
+    session_start();
 
-require "connectToDB.php";
-require "userData.php";
+    require "components/connectToDB.php";
+    require "components/userData.php";
 ?>
 
 <!doctype html>
-<html lang="ru">
+<html>
 <head>
-<?php include "head.php"; ?>
+<?php include "components/head.php"; ?>
 <title>Личный кабинет</title>
 </head>
 <body>
-    <?php include "navbar.php";?>
+    <?php include "components/navbar.php";?>
       
     <div class="container-fluid">
         <div class="container">
             <div class="row my-4">
-                <?php include "navlinks.php"; ?>
+                <?php include "components/navlinks.php"; ?>
 
                 <div class="col-12 col-md-3 my-4">
                     <img class="img-fluid mb-3 rounded" src="/img/img_avatar.png ">

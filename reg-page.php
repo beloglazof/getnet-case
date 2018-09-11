@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="ru">
-  <head>
-    <?php include "head.php"; ?>
+<html>
+<head>
+    <?php include "components/head.php"; ?>
     <title>Регистрация</title>
-  </head>
+</head>
 <body>
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-md-4 my-5">
             <form method="post" action="registration.php" class="jumbotron">
                 <h1>Регистрация</h1>
                 <div class="form-group">
@@ -33,12 +33,14 @@
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Регистрация</button>
                     <p class="mt-4 mb-0">
-                        Уже есть аккаунт? 
-                        <a href="index.html">Войти</a>
+                        Уже есть аккаунт?
+                        <a href="index.php">Войти</a>
                     </p>
                 </div>
-    
-  
-    </form>
+
+
+            </form>
+        </div>
+    </div>
 </body>
 </html>

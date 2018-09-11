@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="ru">
-  <head>
-    <?php include "head.php";?>
+<html>
+<head>
+    <?php include "components/head.php";?>
     <title>Вход</title>
 </head>
 <body>
 <div class="row justify-content-center">
-    <div class="col-12 col-lg-4">
-        <form class="jumbotron" method="POST" action="login.php">            
+    <div class="col-12 col-md-4">
+        <form class="jumbotron" method="POST" action="components/login.php">            
             <h1 class="h2">Вход</h1>
             <div class="form-group">
                 <input type="email" class="form-control" placeholder="Адрес эл.почты" required="required" name="email">

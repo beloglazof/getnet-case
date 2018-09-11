@@ -1,31 +1,27 @@
 <?php
     session_start();
 
-    require "connectToDB.php";
-    require "userData.php";
+    require "components/connectToDB.php";
+    require "components/userData.php";
 ?>
 
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta charset="utf-8">
+    <?php include 'components/head.php'; ?>
     <title>Редактировать профиль</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    
 </head>
 <body>
-    <?php include "navbar.php"?>
+    <?php include "components/navbar.php"; ?>
 
     <div class="container-fluid">
         <div class="container">
             <div class="row my-4">
 
-                <?php include "navlinks.php"; ?>
-
-                
-
-                
+                <?php include "components/navlinks.php"; ?>
+  
             </div>
             <div class="row my-4">
                 <div class="col-12 col-md-6">
@@ -42,6 +38,6 @@
             </div>
         </div>
     </div>
-    <script src="editProfile.js"></script>
+    <script src="js/editProfile.js"></script>
 </body>
 </html>
