@@ -1,7 +1,7 @@
 #!/usr/bin/env tarantool
 local uuid = require('uuid')
 
-box.cfg{listen=4000}
+box.cfg{}
 
 local function create_database()
   local users_space = box.schema.space.create('users', {
@@ -18,24 +18,31 @@ local function create_database()
     parts = {2},
     if_not_exists = true
   })
+  users_space:create_index('credentials_index', {
+    type = 'tree',
+    unique = true,
+    parts = {2, 'string', 3, 'string'},
+    if_not_exists = true
+  })
 end
 
 create_database()
 
 local function handler(self)
-  return self:render{ json = { ['Your-IP-Is'] = self.peer.host } }
+  return self:render{ json = { 'message'= 'it works' } }
 end
 
 local function get_user_by_email(email)
   local users = box.space.users
-  return users.index['email_index']:select(email)[1]
+  return users.index['email_index']:select({email})[1]
 end
 
-local function register( email, password )
+local function register(email, password)
   local response = {}
   local is_user_exist = get_user_by_email(email)
   if is_user_exist then
-    response.message = 'User ' .. email .. ' - exist'
+    response.message = 'User exist'
+    response.error = true
     return response
   end
   local users = box.space.users
@@ -45,7 +52,8 @@ local function register( email, password )
     email,
     password
   }
-  response.message = 'User ' .. email .. ' - created'
+  response.message = 'Success'
+  response.error = false
   return response
 end
 
@@ -59,11 +67,28 @@ local function handle_registration(self)
   end
 end
 
-local function handle_authenticaion(self)
+local function handle_authentication(self)
+  local method = self.method
+  if method == 'POST' then
+    local email = self:post_param('email')
+    local password = self:post_param('password')
+    local users = box.space.users
+    local user = users.index['credentials_index']:select({email, password})[1]
 
+    if user ~= nil then
+      local response = self:render{ json = {'message' = 'Success', 'error' = false } }
+      response:setcookie({ name = 'uid', value = user[1], expires = '1d' })
+      return response
+    end
+
+    local response = self:render{ json = {'message' = 'Wrong login or password', 'error' = true} }
+    response.status = 403
+    return response
+  end
+end
 
 local server = require('http.server').new(nil, 8080)
 server:route({ path = '/' }, handler)
-server:route({ path = '/register' }, handle_registration)
-server:route({ path = '/auth' }, handle_authenticaion)
+server:route({ path = '/registration' }, handle_registration)
+server:route({ path = '/auth' }, handle_authentication)
 server:start()
