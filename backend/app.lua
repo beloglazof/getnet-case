@@ -29,7 +29,7 @@ end
 create_database()
 
 local function handler(self)
-  return self:render{ json = { 'message'= 'it works' } }
+  return self:render{ json = { ['message'] = 'it works' } }
 end
 
 local function get_user_by_email(email)
@@ -58,13 +58,13 @@ local function register(email, password)
 end
 
 local function handle_registration(self)
-  local method = self.method
-  if method == 'POST' then
-    local email = self:post_param('email')
-    local password = self:post_param('password')
-    local response = register(email, password)
-    return self:render{ json = response }
-  end
+  local email = self:param('email')
+  local password = self:param('password')
+  local req = self:json()
+  -- local response = register(email, password)
+  local r = self:render{ json = req }
+  r.headers = { ['Access-Control-Allow-Origin'] = '*' }
+  return r
 end
 
 local function handle_authentication(self)
@@ -76,12 +76,12 @@ local function handle_authentication(self)
     local user = users.index['credentials_index']:select({email, password})[1]
 
     if user ~= nil then
-      local response = self:render{ json = {'message' = 'Success', 'error' = false } }
+      local response = self:render{ json = {['message'] = 'Success', ['error'] = false } }
       response:setcookie({ name = 'uid', value = user[1], expires = '1d' })
       return response
     end
 
-    local response = self:render{ json = {'message' = 'Wrong login or password', 'error' = true} }
+    local response = self:render{ json = {['message'] = 'Wrong login or password', ['error'] = true} }
     response.status = 403
     return response
   end
