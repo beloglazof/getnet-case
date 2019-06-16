@@ -2,7 +2,7 @@
   <b-container>
     <b-row>
       <b-col>
-        <b-form @submit="onSubmit">
+        <b-form @submit.prevent="onSubmit">
           <h1>Регистрация</h1>
           <b-form-group id="email-input-group" label="email" label-for="email">
             <b-form-input
@@ -42,7 +42,8 @@
 </template>
 
 <script>
-import {register} from '../api';
+import { register } from "../api";
+
 export default {
   data() {
     return {
@@ -54,12 +55,10 @@ export default {
     };
   },
   methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        // alert(JSON.stringify(this.form))
-        const {email, password} = this.form;
-        register(email,password);
-      },
+    onSubmit() {
+      const { email, password } = this.form;
+      register(email, password);
     }
+  }
 };
 </script>

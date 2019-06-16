@@ -3,7 +3,8 @@
     <b-row>
       <b-col>
         <b-card title="Авторизация" tag="article">
-          <b-form>
+          <b-form @submit.prevent="onSubmit">
+            <p v-if="error" v-model="message"></p>
             <b-form-group id="email-input-group" label="email" label-for="email">
               <b-form-input
                 id="email"
@@ -27,14 +28,27 @@
 </template>
 
 <script>
+import auth from '../auth';
+
 export default {
   data() {
     return {
       form: {
-        email: "",
-        password: ""
-      }
+        email: '',
+        password: '',
+      },
+      error: false,
+      message: '',
     };
-  }
+  },
+  methods: {
+    async onSubmit(e) {
+      const { email, password } = this.form;
+      const [authenticated, message] = await auth.login(email, password);
+      if (authenticated) {
+        this.$router.replace(this.$route.query.redirect || '/');
+      }
+    },
+  },
 };
 </script>
