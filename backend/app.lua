@@ -58,33 +58,51 @@ local function register(email, password)
 end
 
 local function handle_registration(self)
-  local email = self:param('email')
-  local password = self:param('password')
   local req = self:json()
-  -- local response = register(email, password)
-  local r = self:render{ json = req }
-  r.headers = { ['Access-Control-Allow-Origin'] = '*' }
-  return r
+  local email = req.email
+  local password = req.password
+  local base_response = register(email, password)
+  local response = self:render{ json = base_response }
+  response.headers = { ['Access-Control-Allow-Origin'] = '*' }
+  return response
+end
+
+local function authenticate(email, password)
+  local users = box.space.users
+  local user = users.index['credentials_index']:select({email, password})[1]
+  if user == nil then 
+    return nil 
+  end
+
+  local uid = user[1]
+  return uid
 end
 
 local function handle_authentication(self)
-  local method = self.method
-  if method == 'POST' then
-    local email = self:post_param('email')
-    local password = self:post_param('password')
-    local users = box.space.users
-    local user = users.index['credentials_index']:select({email, password})[1]
+  local req = self:json()
+  local base_response = {}
+  local email = req.email
+  local password = req.password
+  local uid = authenticate(email, password)
+  local is_authenticated = uid ~= nil
 
-    if user ~= nil then
-      local response = self:render{ json = {['message'] = 'Success', ['error'] = false } }
-      response:setcookie({ name = 'uid', value = user[1], expires = '1d' })
-      return response
-    end
-
-    local response = self:render{ json = {['message'] = 'Wrong login or password', ['error'] = true} }
-    response.status = 403
+  if is_authenticated then
+    base_response.message = 'Success'
+    base_response.error = false
+    base_response.uid = uid
+    local response = self:render{ json = base_response }
+    -- response:setcookie({ name = 'uid', value = uid, domain = 'localhost', expires = '1d' })
+    response.headers = { 
+      ['Access-Control-Allow-Origin'] = '*',
+     }
     return response
   end
+
+  base_response.message = 'Wrong email or password'
+  base_response.error = true
+  local response = self:render{ json = base_response }
+  response.headers = { ['Access-Control-Allow-Origin'] = '*' }
+  return response
 end
 
 local server = require('http.server').new(nil, 8080)
