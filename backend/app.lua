@@ -1,7 +1,66 @@
 #!/usr/bin/env tarantool
 local uuid = require('uuid')
-
+local socket = require 'socket'
+local smtp = require 'socket.smtp'
+local ssl = require 'ssl'
+local https = require 'ssl.https'
+local ltn12 = require 'ltn12'
 box.cfg{}
+local MAIL = {
+  server = 'smtp://smtp.gmail.com:465',
+  options = {
+    username = 'beloglazov.v.d@gmail.com',
+    password = 'Czdf12369',
+  },
+  sender = 'beloglazov.v.d@gmail.com'
+}
+function sslCreate()
+    local sock = socket.tcp()
+    return setmetatable({
+        connect = function(_, host, port)
+            local r, e = sock:connect(host, port)
+            if not r then return r, e end
+            sock = ssl.wrap(sock, {mode='client', protocol='tlsv1'})
+            return sock:dohandshake()
+        end
+    }, {
+        __index = function(t,n)
+            return function(_, ...)
+                return sock[n](sock, ...)
+            end
+        end
+    })
+end
+
+function send_mail(subject, body)
+    local msg = {
+        headers = {
+            from = MAIL.sender,
+            to = subject,
+            subject = subject
+        },
+        body = body
+    }
+
+    local ok, err = smtp.send {
+        from = MAIL.sender,
+        rcpt = subject,
+        source = smtp.message(msg),
+        user = MAIL.options.username,
+        password = MAIL.options.password,
+        server = 'smtp.gmail.com',
+        port = 465,
+        create = sslCreate
+    }
+    if not ok then
+        print("Mail send failed", err) -- better error handling required
+    end
+end
+
+
+local function send_activation_code(to)
+  send_mail(to, '123456')
+end
 
 local function create_database()
   local users_space = box.schema.space.create('users', {
@@ -47,11 +106,14 @@ local function register(email, password)
   end
   local users = box.space.users
   local user_id = uuid.str()
+  local state = 'inactive'
   users:insert{
     user_id,
     email,
-    password
+    password,
+    state
   }
+  send_activation_code(email)
   response.message = 'Success'
   response.error = false
   return response
