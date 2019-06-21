@@ -1,10 +1,9 @@
-FROM tarantool/tarantool:2
+FROM python:stretch
 
-COPY *.lua /opt/tarantool/
-EXPOSE 8080
-WORKDIR /opt/tarantool
+COPY . /app
 
-RUN apk add --no-cache git cmake clang clang-dev make gcc g++ libc-dev linux-headers
-# RUN apk add --no-cache gcc
-RUN luarocks install luasocket
-# CMD ["tarantool", "app.lua"]
+WORKDIR /app
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "app.py"]
