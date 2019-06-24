@@ -1,13 +1,7 @@
-import '@babel/polyfill';
-import 'mutationobserver-shim';
-import Vue from 'vue';
-import './plugins/bootstrap-vue';
-import App from './App.vue';
-import router from './router';
+import App from './App.svelte';
 
-Vue.config.productionTip = false;
+const app = new App({
+	target: document.body,
+});
 
-new Vue({
-  router,
-  render: h => h(App),
-}).$mount('#app');
+export default app;
