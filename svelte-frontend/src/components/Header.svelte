@@ -1,7 +1,23 @@
 <script>
-  import {Link} from 'svero';
+  import {navigateTo} from 'svero';
+  function handleLogout(){
+    localStorage.clear();
+    navigateTo('/login')
+  }
 </script>
+<style>
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 40px;
+    background-color: gainsboro;
+  }
+</style>
 <header>
   <span>Company</span>
-  <Link href='/login'>Выйти</Link>
+  <a href="/login" on:click|preventDefault={handleLogout}>
+    Выйти
+  </a>
 </header>
